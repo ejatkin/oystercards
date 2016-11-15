@@ -6,4 +6,8 @@ describe Oystercard do
     expect(subject.money).to eq 0
   end
 
+  it 'has a balance on the card' do
+    expect(subject).to respond_to(:balance)
+  end
+
 end

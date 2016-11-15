@@ -5,5 +5,8 @@ class Oystercard
   def initialize(money=0)
     @money = money
   end
+
+  def balance
+  end
   
 end
