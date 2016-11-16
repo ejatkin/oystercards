@@ -1,6 +1,7 @@
 class OysterCard
   MAXIMUM_LIMIT = 90
   MINIMUM_LIMIT = 1
+  MINIMUM_FARE = 1
   attr_reader :balance
 
   def initialize
@@ -13,16 +14,13 @@ class OysterCard
     @balance += value
   end
 
-  def deduct(value)
-    @balance -= value
-  end
-
   def touch_in
     raise "Error: Insufficient balance, please top up." if insufficient_funds?
     @in_use = true
   end
 
   def touch_out
+    deduct(MINIMUM_FARE)
     @in_use = false
   end
 
@@ -37,6 +35,10 @@ class OysterCard
 
   def insufficient_funds?
     @balance < MINIMUM_LIMIT
+  end
+
+  def deduct(value)
+    @balance -= value
   end
 
   attr_reader :in_use
