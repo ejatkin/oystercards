@@ -34,6 +34,20 @@ describe Oystercard do
     end
   end
 
+  context '#deduct_money' do
 
+    before(:each) do
+      subject.top_up(70)
+      @amount = 1
+    end
+
+    it 'should respond to the deduct method' do
+      expect(subject).to respond_to(:deduct).with(@amount).argument
+    end
+
+    it 'should deduct money from the card and return new balance' do
+      expect{subject.deduct(@amount)}.to change{subject.balance}.by(-@amount)
+    end
+  end
 
 end

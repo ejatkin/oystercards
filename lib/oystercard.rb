@@ -7,10 +7,12 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise 'The card has reached its maximum, no more top up' if balance + amount >= 90
+    raise 'The card has reached its maximum, no more top up' if balance + amount > 90
     @balance += amount
   end
 
-
+  def deduct(amount)
+    @balance -= amount
+  end
 
 end
