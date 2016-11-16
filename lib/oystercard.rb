@@ -20,8 +20,10 @@ class Oystercard
     @in_journey = true
   end
 
+
+
   def touch_out
-    message = "You can only touch out if you already touched in" 
+    message = "You can only touch out if you already touched in"
     raise message if @in_journey == false
     @in_journey = false
   end
