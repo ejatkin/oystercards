@@ -30,6 +30,15 @@ class Oystercard
   def touch_out
     message = "You can only touch out if you already touched in"
     raise message if @in_journey == false
+    deduct(MINIMUM_FARE)
     @in_journey = false
   end
+
+  private
+
+  def deduct(amount)
+    @balance -= amount
+  end
+
+
 end

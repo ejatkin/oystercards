@@ -41,15 +41,14 @@ describe Oystercard do
 
     before(:each) do
       oyster.top_up(70)
-      @amount = 1
+
     end
 
-    it 'should respond to the deduct method' do
-      expect(oyster).to respond_to(:deduct).with(@amount).argument
-    end
 
-    it 'should deduct money from the card and return new balance' do
-      expect{oyster.deduct(@amount)}.to change{oyster.balance}.by(-@amount)
+
+    it "should deduct minimum fare from balance at touch out" do
+      oyster.touch_in
+      expect{oyster.touch_out}.to change{oyster.balance}.by(-Oystercard::MINIMUM_FARE)
     end
   end
 
@@ -84,7 +83,6 @@ describe Oystercard do
 
     it 'raises an error when you try to touch in with less than minimum fare on balance' do
       message = "You cannot touch in without having the minimum fare on your card"
-      # oyster::MINIMUM_FARE
       expect{oyster.touch_in}.to raise_error message
     end
 
