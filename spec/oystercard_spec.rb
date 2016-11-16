@@ -35,14 +35,21 @@ describe OysterCard do
     it { is_expected.to respond_to(:touch_out) }
     it { is_expected.to respond_to(:in_journey?)}
     it "changes in_use to true when touched in" do
+      oystercard.top_up(1)
       oystercard.touch_in
       expect(oystercard.in_journey?).to eq true
     end
 
     it "changes in_use to false when touched out" do
+      oystercard.top_up(1)
       oystercard.touch_in
       oystercard.touch_out
       expect(oystercard.in_journey?).to eq false
+    end
+
+    it "refuses to let you touch in unless the balance is at least £#{OysterCard::MINIMUM_LIMIT}" do
+      message = "Error: Insufficient balance, please top up."
+      expect {oystercard.touch_in}.to raise_error(message)
     end
   end
 

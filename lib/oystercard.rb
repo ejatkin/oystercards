@@ -1,5 +1,6 @@
 class OysterCard
   MAXIMUM_LIMIT = 90
+  MINIMUM_LIMIT = 1
   attr_reader :balance
 
   def initialize
@@ -8,7 +9,7 @@ class OysterCard
   end
 
   def top_up(value)
-    raise "Cannot top up: £#{MAXIMUM_LIMIT} limit would be exceeded" if (limit_exceeded?(value))
+    raise "Cannot top up: £#{MAXIMUM_LIMIT} limit would be exceeded" if limit_exceeded?(value)
     @balance += value
   end
 
@@ -17,6 +18,7 @@ class OysterCard
   end
 
   def touch_in
+    raise "Error: Insufficient balance, please top up." if insufficient_funds?
     @in_use = true
   end
 
@@ -31,6 +33,10 @@ class OysterCard
   private
   def limit_exceeded?(value)
     @balance + value > MAXIMUM_LIMIT
+  end
+
+  def insufficient_funds?
+    @balance < MINIMUM_LIMIT
   end
 
   attr_reader :in_use
