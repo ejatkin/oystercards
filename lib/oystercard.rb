@@ -1,5 +1,8 @@
 class Oystercard
 
+  MINIMUM_FARE = 1
+  MAXIMUM_BALANCE = 90
+
   attr_reader :balance, :in_journey
 
   def initialize
@@ -8,7 +11,7 @@ class Oystercard
   end
 
   def top_up(amount)
-    raise 'The card has reached its maximum, no more top up' if balance + amount > 90
+    raise 'The card has reached its maximum, no more top up' if balance + amount > MAXIMUM_BALANCE
     @balance += amount
   end
 
@@ -17,6 +20,8 @@ class Oystercard
   end
 
   def touch_in
+    message = "You cannot touch in without having the minimum fare on your card"
+    raise message if @balance < MINIMUM_FARE
     @in_journey = true
   end
 

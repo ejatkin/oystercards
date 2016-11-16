@@ -53,7 +53,12 @@ describe Oystercard do
     end
   end
 
-  context 'When checking the satus' do
+  context 'When checking the status' do
+
+    before(:each) do
+      oyster.top_up(1)
+    end
+
     it "should return the status of the card" do
       expect(oyster.in_journey).to eq false
     end
@@ -68,13 +73,19 @@ describe Oystercard do
       oyster.touch_out
       expect(oyster.in_journey).to eq false
     end
-    
+
   end
   context "raise error" do
 
     it "when trying to touch out without touching in" do
       message = "You can only touch out if you already touched in"
       expect{oyster.touch_out}.to raise_error message
+    end
+
+    it 'raises an error when you try to touch in with less than minimum fare on balance' do
+      message = "You cannot touch in without having the minimum fare on your card"
+      # oyster::MINIMUM_FARE
+      expect{oyster.touch_in}.to raise_error message
     end
 
   end
