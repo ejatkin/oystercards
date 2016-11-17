@@ -22,18 +22,16 @@ class Oystercard
   end
 
   def touch_in(entry_station)
-    @entry_station = entry_station
     message = "You cannot touch in without having the minimum fare on your card"
     raise message if @balance < MINIMUM_FARE
+    @entry_station = entry_station
   end
-
-
 
   def touch_out(exit_station)
     message = "You can only touch out if you already touched in"
     raise message if !in_journey?
-    @exit_station = exit_station
     deduct(MINIMUM_FARE)
+    @exit_station = exit_station
   end
 
   private
