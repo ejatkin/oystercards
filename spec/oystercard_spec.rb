@@ -4,7 +4,8 @@ describe Oystercard do
 
   subject(:oyster) {described_class.new}
 
-  let(:station) { double :station}
+  let(:entry_station) { double :entry_station}
+  let(:exit_station) { double :exit_station}
 
 
   context 'balance on card' do
@@ -46,8 +47,8 @@ describe Oystercard do
     end
 
     it "should deduct minimum fare from balance at touch out" do
-      oyster.touch_in(station)
-      expect{oyster.touch_out}.to change{oyster.balance}.by(-Oystercard::MINIMUM_FARE)
+      oyster.touch_in(entry_station)
+      expect{oyster.touch_out(exit_station)}.to change{oyster.balance}.by(-Oystercard::MINIMUM_FARE)
     end
   end
 
@@ -55,17 +56,26 @@ describe Oystercard do
 
     it 'records the entry_station on card' do
       oyster.top_up(10)
-      oyster.touch_in(station)
-      expect(oyster.entry_station).to eq station
+      oyster.touch_in(entry_station)
+      expect(oyster.entry_station).to eq entry_station
     end
   end
 
-  context 'exit station' do
-    it 'removes the entry_station from card' do
+  # context 'exit station' do
+  #   it 'removes the entry_station from card' do
+  #     oyster.top_up(10)
+  #     oyster.touch_in(entry_station)
+  #     oyster.touch_out(exit_station)
+  #     expect(oyster.entry_station).to eq nil
+  #   end
+  # end
+
+  context '#exit station' do
+    it 'adds exit_station to card on touching out' do
       oyster.top_up(10)
-      oyster.touch_in(station)
-      oyster.touch_out
-      expect(oyster.entry_station).to eq nil
+      oyster.touch_in(entry_station)
+      oyster.touch_out(exit_station)
+      expect(oyster.exit_station).to eq exit_station
     end
   end
 
@@ -73,12 +83,12 @@ describe Oystercard do
 
     it "when trying to touch out without touching in" do
       message = "You can only touch out if you already touched in"
-      expect{oyster.touch_out}.to raise_error message
+      expect{oyster.touch_out(exit_station)}.to raise_error message
     end
 
     it 'raises an error when you try to touch in with less than minimum fare on balance' do
       message = "You cannot touch in without having the minimum fare on your card"
-      expect{oyster.touch_in(station)}.to raise_error message
+      expect{oyster.touch_in(entry_station)}.to raise_error message
     end
 
   end
