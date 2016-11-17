@@ -21,16 +21,18 @@ attr_reader :balance, :entry_station, :station_history
 
   def touch_in(entry_station)
     fail "Not enough funds to travel" if self.balance < MINIMUM_BALANCE
+    create_journey(Journey.new, entry_station)
     @entry_station = entry_station
   end
+
 
   def in_journey?
     !@entry_station.nil?
   end
 
   def touch_out(exit_station)
-    deduct(MINIMUM_BALANCE)
-    #@station_history
+    station_history.last.end(exit_station)
+    deduct(station_history.last.fare)
     @entry_station = nil
   end
 
@@ -39,6 +41,11 @@ attr_reader :balance, :entry_station, :station_history
 
   def deduct(amount)
     self.balance -= amount
+  end
+
+  def create_journey(journey, entry_station)
+    journey.start(entry_station)
+    @station_history << journey
   end
 
 end

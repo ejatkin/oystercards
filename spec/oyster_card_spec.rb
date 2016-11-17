@@ -75,11 +75,9 @@ describe Oystercard do
         oyster.touch_in(entry_station)
         oyster.touch_out(exit_station)
       end
-      it 'should assign the entry station to its hash key' do
-        expect(oyster.station_history[-1]).to have_value entry_station
-      end
-      it 'should assign the exit station to its hash key' do
-        expect(oyster.station_history[-1]).to have_value exit_station
+      it 'should contain journey objects in the station history' do
+        
+        expect(oyster.station_history[-1]).to be_a_kind_of Journey
       end
     end
 
