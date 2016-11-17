@@ -4,6 +4,8 @@ describe Oystercard do
 
   subject(:oyster) {described_class.new}
 
+  let(:station) { double :station}
+
 
   context 'balance on card' do
 
@@ -41,39 +43,32 @@ describe Oystercard do
 
     before(:each) do
       oyster.top_up(70)
-
     end
 
-
-
     it "should deduct minimum fare from balance at touch out" do
-      oyster.touch_in
+      oyster.touch_in(station)
       expect{oyster.touch_out}.to change{oyster.balance}.by(-Oystercard::MINIMUM_FARE)
     end
   end
 
-  context 'When checking the status' do
+  context '#entry_station' do
 
-    before(:each) do
-      oyster.top_up(1)
+    it 'records the entry_station on card' do
+      oyster.top_up(10)
+      oyster.touch_in(station)
+      expect(oyster.entry_station).to eq station
     end
-
-    it "should return the status of the card" do
-      expect(oyster.in_journey).to eq false
-    end
-
-    it "should change the status is true" do
-      oyster.touch_in
-      expect(oyster.in_journey).to eq true
-    end
-
-    it "should change the status is true" do
-      oyster.touch_in
-      oyster.touch_out
-      expect(oyster.in_journey).to eq false
-    end
-
   end
+
+  context 'exit station' do
+    it 'removes the entry_station from card' do
+      oyster.top_up(10)
+      oyster.touch_in(station)
+      oyster.touch_out
+      expect(oyster.entry_station).to eq nil
+    end
+  end
+
   context "raise error" do
 
     it "when trying to touch out without touching in" do
@@ -83,7 +78,7 @@ describe Oystercard do
 
     it 'raises an error when you try to touch in with less than minimum fare on balance' do
       message = "You cannot touch in without having the minimum fare on your card"
-      expect{oyster.touch_in}.to raise_error message
+      expect{oyster.touch_in(station)}.to raise_error message
     end
 
   end
