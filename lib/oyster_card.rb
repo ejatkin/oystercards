@@ -1,8 +1,8 @@
-require_relative 'journey'
+require_relative 'journeylog.rb'
 
 class Oystercard
 
-attr_reader :balance, :entry_station, :station_history
+attr_reader :balance, :entry_station, :journey_log
 
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
@@ -10,7 +10,7 @@ attr_reader :balance, :entry_station, :station_history
   def initialize
     @balance = 0
     @entry_station = nil
-    @station_history = []
+    @journey_log = JourneyLog.new
   end
 
   def top_up(amount)
@@ -21,7 +21,8 @@ attr_reader :balance, :entry_station, :station_history
 
   def touch_in(entry_station)
     fail "Not enough funds to travel" if self.balance < MINIMUM_BALANCE
-    create_journey(Journey.new, entry_station)
+    check_previous_journey
+    create_journey(entry_station)
     @entry_station = entry_station
   end
 
@@ -31,8 +32,8 @@ attr_reader :balance, :entry_station, :station_history
   end
 
   def touch_out(exit_station)
-    station_history.last.end(exit_station)
-    deduct(station_history.last.fare)
+    journey_log.end_journey(exit_station)
+    deduct(journey_log.journeys.last.fare)
     @entry_station = nil
   end
 
@@ -43,9 +44,14 @@ attr_reader :balance, :entry_station, :station_history
     self.balance -= amount
   end
 
-  def create_journey(journey, entry_station)
-    journey.start(entry_station)
-    @station_history << journey
+  def create_journey(entry_station)
+    @journey_log.start_journey(entry_station)
+  end
+
+  def check_previous_journey
+    if journey_log.journeys.any? && journey_log.journeys.last.incomplete?
+      deduct(journey_log.journeys.last.fare)
+    end
   end
 
 end

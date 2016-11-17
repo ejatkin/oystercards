@@ -1,4 +1,4 @@
-require_relative 'oyster_card'
+require_relative 'station'
 
 class Journey
   attr_reader :trip, :balance
@@ -20,7 +20,7 @@ class Journey
 
   def fare
     return Penalty_fare if incomplete?
-    return Minimum_fare
+    return Minimum_fare + charge_zones
   end
 
   def incomplete?
@@ -29,5 +29,11 @@ class Journey
 
   private
     attr_writer :trip
+
+   def charge_zones
+     first_zone = trip[:entry_station].zone
+     second_zone = trip[:exit_station].zone
+     (first_zone - second_zone).abs
+  end
 
 end

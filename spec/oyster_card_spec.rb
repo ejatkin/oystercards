@@ -2,16 +2,18 @@ require 'oyster_card'
 
 describe Oystercard do
   subject(:oyster) { described_class.new }
-  let(:entry_station) { double :entry_station }
-  let(:exit_station) {double :exit_station}
+  let(:entry_station) { double :entry_station, zone: 1 }
+  let(:exit_station) { double :exit_station, zone: 1 }
 
     context "new card" do
     it 'should have a default balance' do
       expect(oyster.balance).to eq 0
     end
-    it 'should have an empty journey history' do
-      expect(oyster.station_history).to be_empty
+
+    it 'should have an empty journey log' do
+      expect(oyster.journey_log.journeys).to be_empty
     end
+
     it 'should have no entry station before touching in' do
       expect(oyster.entry_station).to be_nil
     end
@@ -76,8 +78,8 @@ describe Oystercard do
         oyster.touch_out(exit_station)
       end
       it 'should contain journey objects in the station history' do
-        
-        expect(oyster.station_history[-1]).to be_a_kind_of Journey
+
+        expect(oyster.journey_log.journeys[-1]).to be_a_kind_of Journey
       end
     end
 
