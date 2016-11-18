@@ -9,8 +9,6 @@ class Oystercard
     @balance = 0
     @entry_station = nil
     @exit_station = nil
-    @journey_history = []
-    @journey = {}
   end
 
   def top_up(amount)
@@ -18,14 +16,9 @@ class Oystercard
     @balance += amount
   end
 
-  def deduct(amount)
-    @balance -= amount
-  end
-
   def touch_in(entry_station)
     message = "You cannot touch in without having the minimum fare on your card"
     raise message if @balance < MINIMUM_FARE
-    @journey[:entry_station] = entry_station
     @entry_station = entry_station
   end
 
@@ -33,12 +26,9 @@ class Oystercard
     message = "You can only touch out if you already touched in"
     raise message if !in_journey?
     deduct(MINIMUM_FARE)
-    @journey[:exit_station] = exit_station
-    @journey_history << @journey
+
     @exit_station = exit_station
   end
-
-
 
   private
 

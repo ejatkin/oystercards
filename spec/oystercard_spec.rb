@@ -51,21 +51,6 @@ describe Oystercard do
     end
   end
 
-  context '#entry_station and #exit_station' do
-    before do
-      oyster.top_up(10)
-      oyster.touch_in(entry_station)
-    end
-
-    it 'records the entry_station on card' do
-      expect(oyster.entry_station).to eq entry_station
-    end
-
-    it 'adds exit_station to card on touching out' do
-      oyster.touch_out(exit_station)
-      expect(oyster.exit_station).to eq exit_station
-    end
-  end
 
   context "raise error" do
 
@@ -81,37 +66,4 @@ describe Oystercard do
 
   end
 
-  context "entry and exit stations" do
-    before do
-    oyster.top_up(10)
-    oyster.touch_in(entry_station)
-    oyster.touch_out(exit_station)
-    end
-
-    it "stores the entry stations of a journey in a hash" do
-      expect(oyster.journey).to have_value(entry_station)
-    end
-
-    it "stores the exit stations of a journey in a hash" do
-      expect(oyster.journey).to have_value(exit_station)
-    end
-
-  end
-
-    context "journey history" do
-      let(:journey)  { {:entry_station => entry_station, :exit_station => exit_station} }
-
-      it "checks that the card has an empty list of journeys by default" do
-        expect(oyster.journey_history).to be_empty
-      end
-
-      it "stores the entry and exit station" do
-      oyster.top_up(10)
-      oyster.touch_in(entry_station)
-      oyster.touch_out(exit_station)
-      expect(oyster.journey_history).to include journey
-    end
-
-  end
-
-end
+end 
