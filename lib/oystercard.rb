@@ -25,7 +25,6 @@ class Oystercard
   def touch_out(exit_station)
     message = "You can only touch out if you already touched in"
     raise message if !in_journey?
-    deduct(MINIMUM_FARE)
 
     @exit_station = exit_station
   end

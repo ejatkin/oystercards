@@ -39,19 +39,6 @@ describe Oystercard do
     end
   end
 
-  context 'deduct_money' do
-
-    before do
-      oyster.top_up(70)
-    end
-
-    it "should deduct minimum fare from balance at touch out" do
-      oyster.touch_in(entry_station)
-      expect{oyster.touch_out(exit_station)}.to change{oyster.balance}.by(-Oystercard::MINIMUM_FARE)
-    end
-  end
-
-
   context "raise error" do
 
     it "when trying to touch out without touching in" do
@@ -66,4 +53,4 @@ describe Oystercard do
 
   end
 
-end 
+end

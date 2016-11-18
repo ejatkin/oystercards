@@ -28,7 +28,22 @@ describe Journey do
     it "stores the entry and exit station" do
       journey.start(entry_station)
       journey.finish(exit_station)
-      expect(journey.journey_history).to include current_journey
+      expect(journey.journey_history).to include { current_journey }
   end
 end
+
+  context "fare" do
+    it "returns minimum fare if journey complete" do
+      journey.start(entry_station)
+      journey.finish(exit_station)
+      expect(journey.fare).to eq Journey::MINIMUM_FARE
+    end
+
+    it "returns penalty fare if journey incomplete" do
+      journey.finish(exit_station)
+      expect(journey.fare).to eq Journey::PENALTY
+    end
+
+  end
+
 end
