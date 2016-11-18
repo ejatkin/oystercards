@@ -34,6 +34,14 @@ class Oystercard
     @exit_station = exit_station
   end
 
+  def journey(entry_station, exit_station)
+    @new_journey = {@entry_station => @exit_station}
+  end
+
+  def add_journey_to_history
+    @journey_history << @new_journey
+  end
+
   private
 
   def deduct(amount)

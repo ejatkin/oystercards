@@ -90,6 +90,14 @@ describe Oystercard do
       expect(oyster.journey_history).to eq []
     end
 
+    it "stores the entry and exit stations of a journey in a hash" do
+      oyster.top_up(10)
+      oyster.touch_in(entry_station)
+      oyster.touch_out(exit_station)
+      journey = {oyster.entry_station => oyster.exit_station}
+      expect(oyster.journey_history).to eq journey
+    end
+
   end
 
 end
