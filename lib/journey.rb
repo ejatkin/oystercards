@@ -11,11 +11,11 @@ class Journey
   end
 
   def start(station)
-    self.trip[:entry_station] = station
+    trip[:entry_station] = station
   end
 
   def end(station)
-    self.trip[:exit_station] = station
+    trip[:exit_station] = station
   end
 
   def fare
@@ -24,7 +24,7 @@ class Journey
   end
 
   def incomplete?
-    self.trip[:entry_station].nil? || self.trip[:exit_station].nil?
+    trip[:entry_station].nil? || trip[:exit_station].nil?
   end
 
   private

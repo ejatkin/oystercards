@@ -45,7 +45,7 @@ attr_reader :balance, :entry_station, :journey_log
   end
 
   def create_journey(entry_station)
-    @journey_log.start_journey(entry_station)
+    journey_log.start_journey(entry_station)
   end
 
   def check_previous_journey

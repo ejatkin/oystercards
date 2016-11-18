@@ -17,7 +17,7 @@ attr_reader :journey_class
 
   def current_journey
     return journeys.last if journeys.last.incomplete?
-    return Journey.new
+    return journey_class.new
   end
 
   def end_journey(station2)
