@@ -26,8 +26,7 @@ describe Oystercard do
     end
 
     it 'the top up increases the amount on the card' do
-      amount = 10
-      expect(oyster.top_up(amount)).to eq(oyster.balance)
+      expect(oyster.top_up(10)).to eq(oyster.balance)
     end
 
     context 'maximum balance' do
@@ -42,7 +41,7 @@ describe Oystercard do
 
   context 'deduct_money' do
 
-    before(:each) do
+    before do
       oyster.top_up(70)
     end
 
@@ -52,19 +51,17 @@ describe Oystercard do
     end
   end
 
-  context '#entry_station' do
+  context '#entry_station and #exit_station' do
+    before do
+      oyster.top_up(10)
+      oyster.touch_in(entry_station)
+    end
 
     it 'records the entry_station on card' do
-      oyster.top_up(10)
-      oyster.touch_in(entry_station)
       expect(oyster.entry_station).to eq entry_station
     end
-  end
 
-  context '#exit station' do
     it 'adds exit_station to card on touching out' do
-      oyster.top_up(10)
-      oyster.touch_in(entry_station)
       oyster.touch_out(exit_station)
       expect(oyster.exit_station).to eq exit_station
     end
@@ -84,10 +81,35 @@ describe Oystercard do
 
   end
 
-  context "journey history" do
+  context "entry and exit stations" do
+    before do
+    oyster.top_up(10)
+    oyster.touch_in(entry_station)
+    oyster.touch_out(exit_station)
+    end
 
-    it "checks that the card has an empty list of journeys by default" do
-      expect(oyster.journey_history).to eq []
+    it "stores the entry stations of a journey in a hash" do
+      expect(oyster.journey).to have_value(entry_station)
+    end
+
+    it "stores the exit stations of a journey in a hash" do
+      expect(oyster.journey).to have_value(exit_station)
+    end
+
+  end
+
+    context "journey history" do
+      let(:journey)  { {:entry_station => entry_station, :exit_station => exit_station} }
+
+      it "checks that the card has an empty list of journeys by default" do
+        expect(oyster.journey_history).to be_empty
+      end
+
+      it "stores the entry and exit station" do
+      oyster.top_up(10)
+      oyster.touch_in(entry_station)
+      oyster.touch_out(exit_station)
+      expect(oyster.journey_history).to include journey
     end
 
   end
